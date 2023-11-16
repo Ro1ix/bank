@@ -10,16 +10,17 @@ namespace bank
     {
         static void Main(string[] args)
         {
-            int number = 0;
-            Schet bank = new Schet();
-            Schet bank_2 = new Schet();
-            bank.Otk(number);
+            List<Account> accounts = new List<Account>();
+            accounts.Add(new Account() { number = 0, name = "", sum = 0 });
+            accounts[0].Start();
+
+
             number++;
             number = SecondBank(bank_2, number);
-            bank.Out();
+            bank.InfoOut();
             Choise1(bank, bank_2, number);
         }
-        static int SecondBank(Schet bank_2, int number)
+        static int SecondBank(Account bank_2, int number)
         {
             Console.WriteLine("\nЖелаете открыть второй счёт?");
             Console.WriteLine("1. Да      2. Нет");
@@ -27,7 +28,7 @@ namespace bank
             switch (input)
             {
                 case "1":
-                    bank_2.Otk(number);
+                    bank_2.Open(number);
                     number++;
                     break;
                 case "2":
@@ -40,7 +41,7 @@ namespace bank
             }
             return number;
         }
-        static void Choise1(Schet bank, Schet bank_2, int number)
+        static void Choise1(Account bank, Account bank_2, int number)
         {
             Console.WriteLine("\nВыберите операцию");
             Console.Write("1. Положить деньги      2. Снять деньги      3. Снять всё      ");
@@ -52,21 +53,21 @@ namespace bank
             switch (input)
             {
                 case "1":
-                    bank.Dob();
+                    bank.Add();
                     Choise1(bank, bank_2, number);
                     break;
                 case "2":
-                    bank.Umen();
+                    bank.Take();
                     Choise1(bank, bank_2, number);
                     break;
                 case "3":
-                    bank.Obnul();
+                    bank.TakeAll();
                     Choise1(bank, bank_2, number);
                     break;
                 case "4":
                     if (bank_2 != null)
                     {
-                        bank_2.Out();
+                        bank_2.InfoOut();
                         Choise2(bank, bank_2, number);
                     }
                     else
@@ -78,8 +79,8 @@ namespace bank
                 case "5":
                     int raznitsa = bank.Perenos();
                     bank_2.Zanos(raznitsa);
-                    bank_2.Out();
-                    bank.Out();
+                    bank_2.InfoOut();
+                    bank.InfoOut();
                     Choise1(bank, bank_2, number);
                     break;
                 default:
@@ -88,7 +89,7 @@ namespace bank
                     break;
             }
         }
-        static void Choise2(Schet bank, Schet bank_2, int number)
+        static void Choise2(Account bank, Account bank_2, int number)
         {
             Console.WriteLine("\nВыберите операцию");
             Console.Write("1. Положить деньги      2. Снять деньги      3. Снять всё      4. Переключиться на другой счёт      5. Перевести на другой счёт");
@@ -97,26 +98,26 @@ namespace bank
             switch (input)
             {
                 case "1":
-                    bank_2.Dob();
+                    bank_2.Add();
                     Choise2(bank, bank_2, number);
                     break;
                 case "2":
-                    bank_2.Umen();
+                    bank_2.Take();
                     Choise2(bank, bank_2, number);
                     break;
                 case "3":
-                    bank_2.Obnul();
+                    bank_2.TakeAll();
                     Choise2(bank, bank_2, number);
                     break;
                 case "4":
-                    bank.Out();
+                    bank.InfoOut();
                     Choise1(bank, bank_2, number);
                     break;
                 case "5":
                     int raznitsa = bank_2.Perenos();
                     bank.Zanos(raznitsa);
-                    bank.Out();
-                    bank_2.Out();
+                    bank.InfoOut();
+                    bank_2.InfoOut();
                     Choise2(bank, bank_2, number);
                     break;
                 default:
