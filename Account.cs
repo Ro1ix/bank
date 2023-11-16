@@ -9,17 +9,22 @@ namespace bank
 {
     class Account
     {
-        public int number { get; set; }
-        public string name { get; set; }
-        public double sum { get; set; }
+        private int number;
+        private string name;
+        private double sum;
         public void Start()
         {
             Open();
+            InfoOut();
         }
         private void Open()
         {
-            Console.Write("Введите номер счёта: ");
-            number = Convert.ToInt32(Console.ReadLine());
+            string input;
+            do
+            {
+                Console.Write("Введите номер счёта: ");
+                input = Console.ReadLine();
+            } while (int.TryParse(input, out number) == false);
             Console.Write("Введите своё имя: ");
             name = Console.ReadLine();
             do
@@ -28,14 +33,23 @@ namespace bank
                 sum = Convert.ToDouble(Console.ReadLine());
                 if (sum < 0)
                 {
-                    Console.WriteLine("ОШИБКА!!! Нажмите любую клавишу и попробуйте ещё раз");
-                    Console.ReadKey();
+                    Console.WriteLine("\nОШИБКА!!! Нажмите Enter и попробуйте ещё раз\n");
+                    do
+                    {
+                        //Nothing
+                    } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
                 }
             } while (sum < 0);
+            Console.WriteLine("СЧЁТ ОТКРЫТ! Нажмите Enter, чтобы продолжить");
+            do
+            {
+                //Nothing
+            } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+            Console.Clear();
         }
-        public void InfoOut()
+        private void InfoOut()
         {
-            Console.WriteLine($"\nНомер счёта: {number}");
+            Console.WriteLine($"Номер счёта: {number}");
             Console.WriteLine($"ФИО: {name}");
             Console.WriteLine($"Сумма на счету: {sum}");
         }
