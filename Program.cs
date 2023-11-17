@@ -14,8 +14,51 @@ namespace bank
             List<Account> accounts = new List<Account>();
             accounts.Add(new Account());
             accounts[0].Start();
-
+            Choise(accounts);
             //Choise1(bank, bank_2, number);
+        }
+        static void Choise(List<Account> accounts)
+        {
+            Console.WriteLine("\nВЫБЕРИТЕ ДЕЙСТВИЕ");
+            Console.WriteLine("1. Положить деньги");
+            Console.WriteLine("2. Снять деньги");
+            Console.WriteLine("3. Снять ВСЕ деньги");
+            Console.WriteLine("4. Открыть новый счёт");
+            Console.WriteLine("Enter. Выход");
+            string input = Console.ReadLine();
+            switch (input)
+            {
+                case "1":
+                    accounts[0].AddStart();
+                    Console.Clear();
+                    accounts[0].InfoOut();
+                    Choise(accounts);
+                    break;
+                case "2":
+                    accounts[0].TakeStart();
+                    Console.Clear();
+                    accounts[0].InfoOut();
+                    Choise(accounts);
+                    break;
+                case "3":
+                    accounts[0].TakeAllStart();
+                    Console.Clear();
+                    accounts[0].InfoOut();
+                    Choise(accounts);
+                    break;
+                case "":
+                    break;
+                default:
+                    Console.WriteLine("\nОШИБКА!!! Нажмите Enter и попробуйте ещё раз . . . ");
+                    do
+                    {
+                        //Nothing
+                    } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                    Console.Clear();
+                    accounts[0].InfoOut();
+                    Choise(accounts);
+                    break;
+            }
         }
         //static int SecondBank(Account bank_2, int number)
         //{

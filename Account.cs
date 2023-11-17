@@ -20,88 +20,187 @@ namespace bank
         private void Open()
         {
             string input;
+            bool error = false;
             do
             {
                 Console.Write("Введите номер счёта: ");
                 input = Console.ReadLine();
-            } while (int.TryParse(input, out number) == false);
-            Console.Write("Введите своё имя: ");
-            name = Console.ReadLine();
-            do
-            {
-                Console.Write("Введите сумму на счету: ");
-                sum = Convert.ToDouble(Console.ReadLine());
-                if (sum < 0)
+                if (int.TryParse(input, out number) == false)
                 {
-                    Console.WriteLine("\nОШИБКА!!! Нажмите Enter и попробуйте ещё раз\n");
+                    Console.Write("\nОШИБКА!!! Номер должен состоять только из цифр\nНажмите Enter и попробуйте ещё раз . . . ");
                     do
                     {
                         //Nothing
                     } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                    Console.Clear();
+                }
+            } while (int.TryParse(input, out number) == false);
+            do
+            {
+                Console.Write("Введите своё имя: ");
+                name = Console.ReadLine();
+                if (name == "")
+                {
+                    error = true;
+                    Console.Write("\nОШИБКА!!! Имя не должно содержать пробелов или пустоту\nНажмите Enter и попробуйте ещё раз . . . ");
+                    do
+                    {
+                        //Nothing
+                    } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                    Console.Clear();
+                    Console.WriteLine($"Введите номер счёта: {number}");
+                    continue;
+                }
+                for (int i = 0; i < name.Length; i++)
+                {
+                    if (name[i] == ' ')
+                    {
+                        error = true;
+                        Console.Write("\nОШИБКА!!! Имя не должно содержать пробелов или пустоту\nНажмите Enter и попробуйте ещё раз . . . ");
+                        do
+                        {
+                            //Nothing
+                        } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                        Console.Clear();
+                        Console.WriteLine($"Введите номер счёта: {number}");
+                        break;
+                    }
+                    else
+                        error = false;
+                }
+            } while (error == true);
+            do
+            {
+                do
+                {
+                    Console.Write("Введите сумму на счету: ");
+                    input = Console.ReadLine();
+                    if (double.TryParse(input, out sum) == false)
+                    {
+                        Console.Write("\nОШИБКА!!! Сумма счёта должна состоять только из цифр\nНажмите Enter и попробуйте ещё раз . . . ");
+                        do
+                        {
+                            //Nothing
+                        } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                        Console.Clear();
+                        Console.WriteLine($"Введите номер счёта: {number}\nВведите своё имя: {name}");
+                    }
+                } while (double.TryParse(input, out sum) == false);
+                if (sum < 0)
+                {
+                    Console.WriteLine("\nОШИБКА!!! Сумма не должна быть отрицательной\nНажмите Enter и попробуйте ещё раз . . . ");
+                    do
+                    {
+                        //Nothing
+                    } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                    Console.Clear();
+                    Console.WriteLine($"Введите номер счёта: {number}\nВведите своё имя: {name}");
                 }
             } while (sum < 0);
-            Console.WriteLine("СЧЁТ ОТКРЫТ! Нажмите Enter, чтобы продолжить");
+            Console.Write("\nСЧЁТ ОТКРЫТ! Нажмите Enter, чтобы продолжить . . . ");
             do
             {
                 //Nothing
             } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
             Console.Clear();
         }
-        private void InfoOut()
+        public void InfoOut()
         {
             Console.WriteLine($"Номер счёта: {number}");
-            Console.WriteLine($"ФИО: {name}");
+            Console.WriteLine($"Имя: {name}");
             Console.WriteLine($"Сумма на счету: {sum}");
         }
-        public void Add()
+        public void AddStart()
         {
-            Console.WriteLine("\nКакую сумму хотите положить?");
-            double input = Convert.ToDouble(Console.ReadLine());
-            if (input > 0)
+            Add();
+        }
+        private void Add()
+        {
+            string input;
+            double cash;
+            do
             {
-                sum += input;
-                Console.WriteLine($"У вас на счету {sum}");
+                Console.Write("\nВведите сумму, которую хотите положить: ");
+                input = Console.ReadLine();
+                if (double.TryParse(input, out cash) == false)
+                    Console.WriteLine("\nОШИБКА!!! Сумма счёта должна состоять только из цифр\nПопробуйте ещё раз . . .");
+            } while (double.TryParse(input, out cash) == false);
+            if (cash > 0)
+            {
+                sum += cash;
+                Console.Write($"\nГОТОВО! Деньги зачислены. Ваша сумма на счету: {sum}\nНажмите Enter, чтобы продолжить . . . ");
+                do
+                {
+                    //Nothing
+                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
             }
             else
             {
-                Console.WriteLine("ОШИБКА!!! Попробуйте ещё раз");
+                Console.WriteLine("\nОШИБКА!!! Сумма не должна быть отрицательной\nПопробуйте ещё раз . . .");
                 Add();
             }
         }
-        public void Take()
+        public void TakeStart()
         {
-            Console.WriteLine("\nКакую сумму хотите снять?");
-            double input = Convert.ToDouble(Console.ReadLine());
-            if (input <= sum && input >= 0)
+            Take();
+        }
+        private void Take()
+        {
+            string input;
+            double cash;
+            do
             {
-                sum -= input;
-                Console.WriteLine($"У вас на счету {sum}");
+                Console.Write("\nВведите сумму, которую хотите снять: ");
+                input = Console.ReadLine();
+                if (double.TryParse(input, out cash) == false)
+                    Console.WriteLine("\nОШИБКА!!! Сумма счёта должна состоять только из цифр\nПопробуйте ещё раз . . .");
+            } while (double.TryParse(input, out cash) == false);
+            if (cash <= sum && cash >= 0)
+            {
+                sum -= cash;
+                Console.Write($"\nГОТОВО! Деньги сняты. Ваша сумма на счету: {sum}\nНажмите Enter, чтобы продолжить . . . ");
+                do
+                {
+                    //Nothing
+                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
             }
             else
             {
-                Console.WriteLine("ОШИБКА!!! Попробуйте ещё раз");
+                Console.WriteLine("\nОШИБКА!!! Сумма не должна превышать сумму счёта или быть отрицательной\nПопробуйте ещё раз . . .");
                 Take();
             }
 
         }
-        public void TakeAll()
+        public void TakeAllStart()
+        {
+            TakeAll();
+        }
+        private void TakeAll()
         {
             Console.WriteLine("\nВы уверены, что хотите снять все деньги со счета?");
             Console.WriteLine("1. Да      2. Нет");
             string input = Console.ReadLine();
-            switch (input)
+            if (input == "1")
             {
-                case "1":
-                    sum = 0;
-                    Console.WriteLine($"У вас на счету {sum}");
-                    break;
-                case "2":
-                    Console.WriteLine("Ваш счёт не изменился");
-                    break;
-                default:
-                    Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-                    TakeAll();
-                    break;
+                sum = 0;
+                Console.Write($"\nГОТОВО! Деньги сняты. Ваша сумма на счету: {sum}\nНажмите Enter, чтобы продолжить . . . ");
+                do
+                {
+                    //Nothing
+                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+            }
+            else if (input == "2")
+            {
+                Console.Write($"\nВаш счёт не изменился: {sum}\nНажмите Enter, чтобы продолжить . . . ");
+                do
+                {
+                    //Nothing
+                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+            }
+            else
+            {
+                Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз . . .");
+                TakeAll();
             }
         }
         public int Perenos()
