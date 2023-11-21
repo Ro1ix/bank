@@ -110,6 +110,10 @@ namespace bank
             Console.WriteLine($"Имя: {name}");
             Console.WriteLine($"Сумма на счету: {sum}");
         }
+        public int InfoNumber()
+        {
+            return number;
+        }
         public void AddStart()
         {
             Add();
@@ -203,24 +207,32 @@ namespace bank
                 TakeAll();
             }
         }
-        public int Perenos()
+        public void Transfer(List<Account> accounts, int accountID, int accountID2)
         {
-            Console.WriteLine("Какую сумму вы хотите перевести?");
-            int input = Convert.ToInt32(Console.ReadLine());
-            if (input < 0 || input > sum)
+            string input;
+            double difference;
+            do
             {
-                Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-                Perenos();
+                Console.Write("\nВведите сумму, которую хотите перевести: ");
+                input = Console.ReadLine();
+                if (double.TryParse(input, out difference) == false)
+                    Console.WriteLine("\nОШИБКА!!! Сумма счёта должна состоять только из цифр\nПопробуйте ещё раз . . .");
+            } while (double.TryParse(input, out difference) == false);
+            if (difference <= accounts[accountID].sum && difference >= 0)
+            {
+                accounts[accountID].sum -= difference;
+                accounts[accountID2].sum += difference;
+                Console.Write($"\nГОТОВО! Деньги переведены\nВаша сумма на счету [{accounts[accountID].number}]: {accounts[accountID].sum}\nВаша сумма на счету [{accounts[accountID2].number}]: {accounts[accountID2].sum}\nНажмите Enter, чтобы продолжить . . . ");
+                do
+                {
+                    //Nothing
+                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
             }
             else
             {
-                sum -= input;
+                Console.WriteLine("\nОШИБКА!!! Сумма не должна превышать сумму счёта или быть отрицательной\nПопробуйте ещё раз . . .");
+                Transfer(accounts, accountID, accountID2);
             }
-            return input;
-        }
-        public void Zanos(int raznitsa)
-        {
-            sum += raznitsa;
         }
     }
 }

@@ -12,39 +12,158 @@ namespace bank
         {
             Console.Title = "Банк";
             List<Account> accounts = new List<Account>();
+            int count = 0;
             accounts.Add(new Account());
-            accounts[0].Start();
-            Choise(accounts);
-            //Choise1(bank, bank_2, number);
+            int accountId = count;
+            accounts[accountId].Start();
+            count++;
+            Choise(accounts, count, accountId);
         }
-        static void Choise(List<Account> accounts)
+        static void Choise(List<Account> accounts, int count, int accountID)
         {
             Console.WriteLine("\nВЫБЕРИТЕ ДЕЙСТВИЕ");
             Console.WriteLine("1. Положить деньги");
             Console.WriteLine("2. Снять деньги");
             Console.WriteLine("3. Снять ВСЕ деньги");
             Console.WriteLine("4. Открыть новый счёт");
+            if (count > 1)
+            {
+                Console.WriteLine("5. Сменить счёт");
+                Console.WriteLine("6. Перевести деньги с текущего счёта на другой");
+            }
             Console.WriteLine("Enter. Выход");
             string input = Console.ReadLine();
             switch (input)
             {
                 case "1":
-                    accounts[0].AddStart();
+                    accounts[accountID].AddStart();
                     Console.Clear();
-                    accounts[0].InfoOut();
-                    Choise(accounts);
+                    accounts[accountID].InfoOut();
+                    Choise(accounts, count, accountID);
                     break;
                 case "2":
-                    accounts[0].TakeStart();
+                    accounts[accountID].TakeStart();
                     Console.Clear();
-                    accounts[0].InfoOut();
-                    Choise(accounts);
+                    accounts[accountID].InfoOut();
+                    Choise(accounts, count, accountID);
                     break;
                 case "3":
-                    accounts[0].TakeAllStart();
+                    accounts[accountID].TakeAllStart();
                     Console.Clear();
-                    accounts[0].InfoOut();
-                    Choise(accounts);
+                    accounts[accountID].InfoOut();
+                    Choise(accounts, count, accountID);
+                    break;
+                case "4":
+                    Console.Clear();
+                    accounts.Add(new Account());
+                    accountID = count;
+                    accounts[accountID].Start();
+                    count++;
+                    Choise(accounts, count, accountID);
+                    break;
+                case "5":
+                    if (count > 1)
+                    {
+                        Console.Clear();
+                        int number;
+                        Console.WriteLine("ВАШИ СЧЕТА");
+                        foreach (Account account in accounts)
+                        {
+                            Console.WriteLine();
+                            if (accounts[accountID].InfoNumber() == account.InfoNumber())
+                                Console.WriteLine("[Текущий]");
+                            account.InfoOut();
+                        }
+                        do
+                        {
+                            Console.Write("\nВведите номер счёта, на который хотите перейти: ");
+                            input = Console.ReadLine();
+                            if (int.TryParse(input, out number) == false)
+                            {
+                                Console.Write("\nОШИБКА!!! Нажмите Enter и попробуйте ещё раз . . . ");
+                                do
+                                {
+                                    //Nothing
+                                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                                goto case "5";
+                            }
+                        } while (int.TryParse(input, out number) == false);
+                        for (int i = 0; i < count; i++)
+                        {
+                            if (number == accounts[i].InfoNumber())
+                            {
+                                accountID = i;
+                                break;
+                            }
+                            else if (i == count - 1)
+                            {
+                                Console.Write("\nОШИБКА!!! Счёта с таким номером не существует\nНажмите Enter и попробуйте ещё раз . . . ");
+                                do
+                                {
+                                    //Nothing
+                                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                                goto case "5";
+                            }
+                        }
+                        Console.Clear();
+                        accounts[accountID].InfoOut();
+                        Choise(accounts, count, accountID);
+                    }
+                    else
+                        goto default;
+                    break;
+                case "6":
+                    if (count > 1)
+                    {
+                        Console.Clear();
+                        int number2;
+                        int accountID2 = 0;
+                        Console.WriteLine("ВАШИ СЧЕТА");
+                        foreach (Account account in accounts)
+                        {
+                            Console.WriteLine();
+                            if (accounts[accountID].InfoNumber() == account.InfoNumber())
+                                Console.WriteLine("[Текущий]");
+                            account.InfoOut();
+                        }
+                        do
+                        {
+                            Console.Write("\nВведите номер счёта, на который хотите перевести деньги: ");
+                            input = Console.ReadLine();
+                            if (int.TryParse(input, out number2) == false)
+                            {
+                                Console.Write("\nОШИБКА!!! Нажмите Enter и попробуйте ещё раз . . . ");
+                                do
+                                {
+                                    //Nothing
+                                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                                goto case "6";
+                            }
+                        } while (int.TryParse(input, out number2) == false);
+                        for (int i = 0; i < count; i++)
+                        {
+                            if (number2 == accounts[i].InfoNumber())
+                            {
+                                accountID2 = i;
+                                break;
+                            }
+                            else if (i == count - 1)
+                            {
+                                Console.Write("\nОШИБКА!!! Счёта с таким номером не существует\nНажмите Enter и попробуйте ещё раз . . . ");
+                                do
+                                {
+                                    //Nothing
+                                } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
+                                goto case "6";
+                            }
+                        }
+                        accounts[accountID].Transfer(accounts, accountID, accountID2);
+                        Console.Clear();
+                        accounts[accountID].InfoOut();
+                        Choise(accounts, count, accountID);
+                    }
+                    else
+                        goto default;
                     break;
                 case "":
                     break;
@@ -55,116 +174,10 @@ namespace bank
                         //Nothing
                     } while (Console.ReadKey(true).Key != ConsoleKey.Enter);
                     Console.Clear();
-                    accounts[0].InfoOut();
-                    Choise(accounts);
+                    accounts[accountID].InfoOut();
+                    Choise(accounts, count, accountID);
                     break;
             }
         }
-        //static int SecondBank(Account bank_2, int number)
-        //{
-        //    Console.WriteLine("\nЖелаете открыть второй счёт?");
-        //    Console.WriteLine("1. Да      2. Нет");
-        //    string input = Console.ReadLine();
-        //    switch (input)
-        //    {
-        //        case "1":
-        //            bank_2.Open(number);
-        //            number++;
-        //            break;
-        //        case "2":
-        //            Console.WriteLine("\nВы не открыли второй счёт");
-        //            break;
-        //        default:
-        //            Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-        //            SecondBank(bank_2, number);
-        //            break;
-        //    }
-        //    return number;
-        //}
-        //static void Choise1(Account bank, Account bank_2, int number)
-        //{
-        //    Console.WriteLine("\nВыберите операцию");
-        //    Console.Write("1. Положить деньги      2. Снять деньги      3. Снять всё      ");
-        //    if (number == 2)
-        //        Console.WriteLine("4. Переключиться на другой счёт      5. Перевести на другой счёт");
-        //    else
-        //        Console.WriteLine();
-        //    string input = Console.ReadLine();
-        //    switch (input)
-        //    {
-        //        case "1":
-        //            bank.Add();
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //        case "2":
-        //            bank.Take();
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //        case "3":
-        //            bank.TakeAll();
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //        case "4":
-        //            if (bank_2 != null)
-        //            {
-        //                bank_2.InfoOut();
-        //                Choise2(bank, bank_2, number);
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-        //                Choise1(bank, bank_2, number);
-        //            }    
-        //            break;
-        //        case "5":
-        //            int raznitsa = bank.Perenos();
-        //            bank_2.Zanos(raznitsa);
-        //            bank_2.InfoOut();
-        //            bank.InfoOut();
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //        default:
-        //            Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //    }
-        //}
-        //static void Choise2(Account bank, Account bank_2, int number)
-        //{
-        //    Console.WriteLine("\nВыберите операцию");
-        //    Console.Write("1. Положить деньги      2. Снять деньги      3. Снять всё      4. Переключиться на другой счёт      5. Перевести на другой счёт");
-        //    Console.WriteLine();
-        //    string input = Console.ReadLine();
-        //    switch (input)
-        //    {
-        //        case "1":
-        //            bank_2.Add();
-        //            Choise2(bank, bank_2, number);
-        //            break;
-        //        case "2":
-        //            bank_2.Take();
-        //            Choise2(bank, bank_2, number);
-        //            break;
-        //        case "3":
-        //            bank_2.TakeAll();
-        //            Choise2(bank, bank_2, number);
-        //            break;
-        //        case "4":
-        //            bank.InfoOut();
-        //            Choise1(bank, bank_2, number);
-        //            break;
-        //        case "5":
-        //            int raznitsa = bank_2.Perenos();
-        //            bank.Zanos(raznitsa);
-        //            bank.InfoOut();
-        //            bank_2.InfoOut();
-        //            Choise2(bank, bank_2, number);
-        //            break;
-        //        default:
-        //            Console.WriteLine("\nОШИБКА!!! Попробуйте ещё раз");
-        //            Choise2(bank, bank_2, number);
-        //            break;
-        //    }
-        //}
     }
 }
