@@ -158,6 +158,7 @@ namespace bank
                                 goto case "6";
                             }
                         }
+                        input = "6";
                         accounts[accountID].Choise(input, accounts, accountID, accountID2);
                         Console.Clear();
                         accounts[accountID].InfoOut();
