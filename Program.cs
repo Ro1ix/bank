@@ -33,22 +33,23 @@ namespace bank
             }
             Console.WriteLine("Enter. Выход");
             string input = Console.ReadLine();
+            int accountID2 = 0;
             switch (input)
             {
                 case "1":
-                    accounts[accountID].AddStart();
+                    accounts[accountID].Choise(input, accounts, accountID, accountID2);
                     Console.Clear();
                     accounts[accountID].InfoOut();
                     Choise(accounts, count, accountID);
                     break;
                 case "2":
-                    accounts[accountID].TakeStart();
+                    accounts[accountID].Choise(input, accounts, accountID, accountID2);
                     Console.Clear();
                     accounts[accountID].InfoOut();
                     Choise(accounts, count, accountID);
                     break;
                 case "3":
-                    accounts[accountID].TakeAllStart();
+                    accounts[accountID].Choise(input, accounts, accountID, accountID2);
                     Console.Clear();
                     accounts[accountID].InfoOut();
                     Choise(accounts, count, accountID);
@@ -117,7 +118,7 @@ namespace bank
                     {
                         Console.Clear();
                         int number2;
-                        int accountID2 = 0;
+                        accountID2 = 0;
                         Console.WriteLine("ВАШИ СЧЕТА");
                         foreach (Account account in accounts)
                         {
@@ -157,7 +158,7 @@ namespace bank
                                 goto case "6";
                             }
                         }
-                        accounts[accountID].Transfer(accounts, accountID, accountID2);
+                        accounts[accountID].Choise(input, accounts, accountID, accountID2);
                         Console.Clear();
                         accounts[accountID].InfoOut();
                         Choise(accounts, count, accountID);

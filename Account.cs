@@ -110,15 +110,29 @@ namespace bank
             Console.WriteLine($"Имя: {name}");
             Console.WriteLine($"Сумма на счету: {sum}");
         }
+        public void Choise(string input, List<Account> accounts, int accountID, int accountID2)
+        {
+            switch (input)
+            {
+                case "1":
+                    Adding();
+                    break;
+                case "2":
+                    Take();
+                    break;
+                case "3":
+                    TakeAll();
+                    break;
+                case "6":
+                    Transfer(accounts, accountID, accountID2);
+                    break;
+            }
+        }
         public int InfoNumber()
         {
             return number;
         }
-        public void AddStart()
-        {
-            Add();
-        }
-        private void Add()
+        private void Adding()
         {
             string input;
             double cash;
@@ -141,12 +155,8 @@ namespace bank
             else
             {
                 Console.WriteLine("\nОШИБКА!!! Сумма не должна быть отрицательной\nПопробуйте ещё раз . . .");
-                Add();
+                Adding();
             }
-        }
-        public void TakeStart()
-        {
-            Take();
         }
         private void Take()
         {
@@ -174,10 +184,6 @@ namespace bank
                 Take();
             }
 
-        }
-        public void TakeAllStart()
-        {
-            TakeAll();
         }
         private void TakeAll()
         {
@@ -207,7 +213,7 @@ namespace bank
                 TakeAll();
             }
         }
-        public void Transfer(List<Account> accounts, int accountID, int accountID2)
+        private void Transfer(List<Account> accounts, int accountID, int accountID2)
         {
             string input;
             double difference;
